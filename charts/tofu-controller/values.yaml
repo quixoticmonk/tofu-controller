@@ -31,7 +31,7 @@ image:
   pullPolicy: IfNotPresent
   # -- Overrides the image tag whose default is the chart appVersion.
   # @default -- `.Chart.AppVersion`
-  tag: "v0.16.0-rc.5"
+  tag: "v0.16.0-rc.6"
 # -- Controller image pull secret
 imagePullSecrets: []
 # -- Resource limits and requests
@@ -110,6 +110,9 @@ clusterDomain: cluster.local
 # -- Argument for `--use-pod-subdomain-resolution` (Controller).
 #  UsePodSubdomainResolution allow pod hostname/subdomain DNS resolution for the pod runner instead of IP based DNS resolution.
 usePodSubdomainResolution: false
+# -- Argument for `--use-priority-queue` (Controller).
+#  Enable the priority queue feature to prioritize new/changed resources over resources loaded after a restart or resync.
+usePriorityQueue: true
 awsPackage:
   install: true
   tag: v4.38.0-v1alpha11
@@ -121,7 +124,7 @@ runner:
     repository: ghcr.io/flux-iac/tf-runner
     # -- Runner image tag
     # @default -- `.Chart.AppVersion`
-    tag: "v0.16.0-rc.5"
+    tag: "v0.16.0-rc.6"
   grpc:
     # -- Maximum GRPC message size (Controller)
     maxMessageSize: 4
@@ -158,7 +161,7 @@ metrics:
     enabled: false
     # -- Install the ServiceMonitor into a different Namespace, as the monitoring stack one
     # @default -- `.Release.Namespace`
-    namespace: ''
+    namespace: ""
     # -- Assign additional labels according to Prometheus' serviceMonitorSelector matching labels
     labels: {}
     # -- Assign additional Annotations

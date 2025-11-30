@@ -9,6 +9,7 @@ import (
 	"time"
 
 	infrav1 "github.com/flux-iac/tofu-controller/api/v1alpha2"
+	"github.com/fluxcd/pkg/apis/meta"
 	sourcev1 "github.com/fluxcd/source-controller/api/v1"
 	. "github.com/onsi/gomega"
 	corev1 "k8s.io/api/core/v1"
@@ -39,7 +40,7 @@ func Test_000260_runner_pod_test(t *testing.T) {
 
 	It("generate a runner pod template")
 	By("passing a terraform object, the runner pod template should be accurate")
-	helloWorldTF := infrav1.Terraform{
+	helloWorldTF := &infrav1.Terraform{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      terraformName,
 			Namespace: "flux-system",
@@ -115,7 +116,7 @@ func Test_000260_runner_pod_test_env_vars(t *testing.T) {
 
 	It("generate a runner pod template")
 	By("passing a terraform object, the runner pod template should be accurate")
-	helloWorldTF := infrav1.Terraform{
+	helloWorldTF := &infrav1.Terraform{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      terraformName,
 			Namespace: "flux-system",
@@ -208,7 +209,7 @@ func Test_000260_runner_pod_test_env_vars_proxy(t *testing.T) {
 
 	It("generate a runner pod template")
 	By("passing a terraform object, the runner pod template should be accurate")
-	helloWorldTF := infrav1.Terraform{
+	helloWorldTF := &infrav1.Terraform{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      terraformName,
 			Namespace: "flux-system",
@@ -301,7 +302,7 @@ func Test_000260_runner_pod_test_env_vars_proxy_overwrite(t *testing.T) {
 
 	It("generate a runner pod template")
 	By("passing a terraform object, the runner pod template should be accurate")
-	helloWorldTF := infrav1.Terraform{
+	helloWorldTF := &infrav1.Terraform{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      terraformName,
 			Namespace: "flux-system",
@@ -421,7 +422,7 @@ func Test_000260_runner_pod_test_env_vars_proxy_output(t *testing.T) {
 			},
 		},
 
-		Artifact: &sourcev1.Artifact{
+		Artifact: &meta.Artifact{
 			Path:           "gitrepository/flux-system/test-tf-controller/b8e362c206e3d0cbb7ed22ced771a0056455a2fb.tar.gz",
 			URL:            server.URL() + "/terraform-envvar-variable-output.tar.gz",
 			Revision:       "master/b8e362c206e3d0cbb7ed22ced771a0056455a2fb",
@@ -604,7 +605,7 @@ func Test_000260_runner_pod_test_env_vars_provider_vars_with_value(t *testing.T)
 			},
 		},
 
-		Artifact: &sourcev1.Artifact{
+		Artifact: &meta.Artifact{
 			Path:           "gitrepository/flux-system/test-tf-controller/b8e362c206e3d0cbb7ed22ced771a0056455a2fb.tar.gz",
 			URL:            server.URL() + "/terraform-envvar-provider-vars.tar.gz",
 			Revision:       "master/b8e362c206e3d0cbb7ed22ced771a0056455a2fb",
@@ -745,7 +746,7 @@ func Test_000260_runner_pod_test_env_vars_provider_vars_without_value(t *testing
 			},
 		},
 
-		Artifact: &sourcev1.Artifact{
+		Artifact: &meta.Artifact{
 			Path:           "gitrepository/flux-system/test-tf-controller/b8e362c206e3d0cbb7ed22ced771a0056455a2fb.tar.gz",
 			URL:            server.URL() + "/terraform-envvar-provider-vars.tar.gz",
 			Revision:       "master/b8e362c206e3d0cbb7ed22ced771a0056455a2fb",
@@ -877,7 +878,7 @@ func Test_000260_runner_pod_test_env_vars_valueFrom_secretRef(t *testing.T) {
 			},
 		},
 
-		Artifact: &sourcev1.Artifact{
+		Artifact: &meta.Artifact{
 			Path:           "gitrepository/flux-system/test-tf-controller/b8e362c206e3d0cbb7ed22ced771a0056455a2fb.tar.gz",
 			URL:            server.URL() + "/terraform-envvar-provider-vars.tar.gz",
 			Revision:       "master/b8e362c206e3d0cbb7ed22ced771a0056455a2fb",
@@ -1044,7 +1045,7 @@ func Test_000260_runner_pod_test_env_vars_valueFrom_configMapRef(t *testing.T) {
 			},
 		},
 
-		Artifact: &sourcev1.Artifact{
+		Artifact: &meta.Artifact{
 			Path:           "gitrepository/flux-system/test-tf-controller/b8e362c206e3d0cbb7ed22ced771a0056455a2fb.tar.gz",
 			URL:            server.URL() + "/terraform-envvar-provider-vars.tar.gz",
 			Revision:       "master/b8e362c206e3d0cbb7ed22ced771a0056455a2fb",

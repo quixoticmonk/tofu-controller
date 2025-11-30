@@ -5,12 +5,13 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"io"
+	"os"
+
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
-	"io"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/types"
-	"os"
 
 	"github.com/hashicorp/terraform-exec/tfexec"
 	ctrl "sigs.k8s.io/controller-runtime"
@@ -28,8 +29,8 @@ func (r *TerraformRunnerServer) tfInit(ctx context.Context, opts ...tfexec.InitO
 
 	err := r.tf.Init(ctx, opts...)
 
-	var sl *tfexec.ErrStateLocked
-	if err != nil && errors.As(err, &sl) == false {
+	var sl *StateLockError
+	if err != nil && !errors.As(err, &sl) {
 		fmt.Fprint(os.Stderr, errBuf.String())
 		err = errors.New(errBuf.String())
 	}
@@ -40,9 +41,10 @@ func (r *TerraformRunnerServer) tfInit(ctx context.Context, opts ...tfexec.InitO
 func (r *TerraformRunnerServer) Init(ctx context.Context, req *InitRequest) (*InitReply, error) {
 	log := ctrl.LoggerFrom(ctx, "instance-id", r.InstanceID).WithName(loggerName)
 	log.Info("initializing")
-	if req.TfInstance != r.InstanceID {
-		err := fmt.Errorf("no TF instance found")
-		log.Error(err, "no terraform")
+
+	if err := r.ValidateInstanceID(req.TfInstance); err != nil {
+		log.Error(err, "terraform session mismatch when initializing")
+
 		return nil, err
 	}
 
@@ -105,7 +107,7 @@ func (r *TerraformRunnerServer) Init(ctx context.Context, req *InitRequest) (*In
 	initOpts = append(initOpts, backendConfigsOpts...)
 	if err := r.tfInit(ctx, initOpts...); err != nil {
 		st := status.New(codes.Internal, err.Error())
-		var stateErr *tfexec.ErrStateLocked
+		var stateErr *StateLockError
 
 		if errors.As(err, &stateErr) {
 			st, err = st.WithDetails(&InitReply{Message: "not ok", StateLockIdentifier: stateErr.ID})

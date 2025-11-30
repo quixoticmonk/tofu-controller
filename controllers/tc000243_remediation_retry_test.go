@@ -64,7 +64,7 @@ func Test_000243_remediation_retry_test(t *testing.T) {
 				Message:            "Fetched revision: master/b8e362c206e3d0cbb7ed22ced771a0056455a2fb",
 			},
 		},
-		Artifact: &sourcev1.Artifact{
+		Artifact: &meta.Artifact{
 			Path:           "gitrepository/flux-system/test-tf-controller/b8e362c206e3d0cbb7ed22ced771a0056455a2fb.tar.gz",
 			URL:            server.URL() + "/bad.tar.gz",
 			Revision:       "master/b8e362c206e3d0cbb7ed22ced771a0056455a2fb",
@@ -185,6 +185,7 @@ spec:
 	// After changing the resource, retry count should be set back to 0.
 	// With setting Retries lower than the previous one, we can check if it was
 	// reset to 0 as it would never reach 2 from 3.
+	g.Expect(k8sClient.Get(ctx, helloWorldTFKey, &createdHelloWorldTF)).Should(Succeed())
 	createdHelloWorldTF.Spec.Remediation.Retries = 2
 	g.Expect(k8sClient.Update(ctx, &createdHelloWorldTF)).Should(Succeed())
 
@@ -230,7 +231,7 @@ spec:
 				Message:            "Fetched revision: master/aaabbbccc6e3d0cbb7ed22ced771a0056455a2fb",
 			},
 		},
-		Artifact: &sourcev1.Artifact{
+		Artifact: &meta.Artifact{
 			Path:           "gitrepository/flux-system/test-tf-controller/aaabbbccc6e3d0cbb7ed22ced771a0056455a2fb.tar.gz",
 			URL:            server.URL() + "/bad.tar.gz",
 			Revision:       "master/aaabbbccc6e3d0cbb7ed22ced771a0056455a2fb",

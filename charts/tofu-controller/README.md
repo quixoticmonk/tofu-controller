@@ -1,6 +1,6 @@
 # Tofu Controller
 
-![Version: 0.16.0-rc.5](https://img.shields.io/badge/Version-0.16.0--rc.5-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v0.16.0-rc.5](https://img.shields.io/badge/AppVersion-v0.16.0--rc.5-informational?style=flat-square)
+![Version: 0.16.0-rc.6](https://img.shields.io/badge/Version-0.16.0--rc.6-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v0.16.0-rc.6](https://img.shields.io/badge/AppVersion-v0.16.0--rc.6-informational?style=flat-square)
 
 This is the Helm chart for the [Tofu Controller](https://github.com/flux-iac/tofu-controller), an IAC controller for Flux [Flux](https://fluxcd.io) to reconcile OpenTofu and Terraform resources in the GitOps way.
 
@@ -80,7 +80,7 @@ __Note__: If you need to use the `imagePullSecrets` it would be best to set `ser
 | rbac.create | bool | `true` | If `true`, create and use RBAC resources |
 | replicaCount | int | `1` | Number of tofu-controller pods to deploy |
 | resources | object | `{"limits":{"cpu":"1000m","memory":"1Gi"},"requests":{"cpu":"200m","memory":"64Mi"}}` | Resource limits and requests |
-| runner | object | `{"creationTimeout":"5m0s","grpc":{"maxMessageSize":4},"image":{"repository":"ghcr.io/flux-iac/tf-runner","tag":"v0.16.0-rc.5"},"serviceAccount":{"allowedNamespaces":["flux-system"],"annotations":{},"create":true,"name":""}}` | Runner-specific configurations |
+| runner | object | `{"creationTimeout":"5m0s","grpc":{"maxMessageSize":4},"image":{"repository":"ghcr.io/flux-iac/tf-runner","tag":"v0.16.0-rc.6"},"serviceAccount":{"allowedNamespaces":["flux-system"],"annotations":{},"create":true,"name":""}}` | Runner-specific configurations |
 | runner.creationTimeout | string | `"5m0s"` | Timeout for runner-creation (Controller) |
 | runner.grpc.maxMessageSize | int | `4` | Maximum GRPC message size (Controller) |
 | runner.image.repository | string | `"ghcr.io/flux-iac/tf-runner"` | Runner image repository |
@@ -95,6 +95,7 @@ __Note__: If you need to use the `imagePullSecrets` it would be best to set `ser
 | serviceAccount.name | string | tofu-controller | Service account to be used |
 | tolerations | list | `[]` | Tolerations properties for the tofu-controller deployment |
 | usePodSubdomainResolution | bool | `false` | Argument for `--use-pod-subdomain-resolution` (Controller).  UsePodSubdomainResolution allow pod hostname/subdomain DNS resolution for the pod runner instead of IP based DNS resolution. |
+| usePriorityQueue | bool | `true` | Argument for `--use-priority-queue` (Controller).  Enable the priority queue feature to prioritize new/changed resources over resources loaded after a restart or resync. |
 | volumeMounts | list | `[]` | Volume mounts properties for the tofu-controller deployment |
 | volumes | list | `[]` | Volumes properties for the tofu-controller deployment |
 | watchAllNamespaces | bool | `true` | If `true`, controller will watch all namespaces for Terraform resources |
